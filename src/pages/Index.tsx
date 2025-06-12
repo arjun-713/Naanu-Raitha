@@ -12,21 +12,25 @@ const Index = () => {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Weather and Quick Actions */}
+        {/* Watchlist and Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-1">
-            <WeatherWidget />
+            <CropWatchlist />
           </div>
           <div className="lg:col-span-2">
             <QuickActions />
           </div>
         </div>
 
+        {/* Weather Widget */}
+        <div className="mb-8">
+          <WeatherWidget />
+        </div>
+
         {/* Main Content */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="xl:col-span-2 space-y-8">
-            <CropWatchlist />
             <HarvestSummary />
           </div>
           

@@ -1,11 +1,40 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import Header from '../components/Header';
+import WeatherWidget from '../components/WeatherWidget';
+import QuickActions from '../components/QuickActions';
+import CropWatchlist from '../components/CropWatchlist';
+import HarvestSummary from '../components/HarvestSummary';
+import MarketNews from '../components/MarketNews';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Weather and Quick Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-1">
+            <WeatherWidget />
+          </div>
+          <div className="lg:col-span-2">
+            <QuickActions />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="xl:col-span-2 space-y-8">
+            <CropWatchlist />
+            <HarvestSummary />
+          </div>
+          
+          {/* Right Column */}
+          <div className="xl:col-span-1">
+            <MarketNews />
+          </div>
+        </div>
       </div>
     </div>
   );

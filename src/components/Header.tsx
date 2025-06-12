@@ -1,9 +1,6 @@
-
 import { Search, Bell, User } from 'lucide-react';
-
 const Header = () => {
-  return (
-    <div className="bg-white shadow-sm border-b border-border sticky top-0 z-50">
+  return <div className="bg-white shadow-sm border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-3">
@@ -12,7 +9,7 @@ const Header = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">Mandi Mitra</h1>
-              <p className="text-xs text-gray-500">Market Friend</p>
+              <p className="text-gray-500 text-xs font-medium">Predict. Sell. Earn.</p>
             </div>
           </div>
           
@@ -29,8 +26,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Header;

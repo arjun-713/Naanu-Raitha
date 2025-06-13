@@ -23,28 +23,34 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
     setIsLoading(true);
 
     try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+      // Dummy authentication - accept any phone number and password
+      if (phoneNumber && password) {
+        // Create a dummy user session in localStorage for testing
+        const dummyUser = {
+          id: 'dummy-user-' + Date.now(),
           phone: phoneNumber,
-          password: password,
-        });
+          email: `${phoneNumber}@dummy.com`,
+          created_at: new Date().toISOString(),
+        };
         
-        if (error) throw error;
+        const dummySession = {
+          user: dummyUser,
+          access_token: 'dummy-token',
+          refresh_token: 'dummy-refresh',
+        };
+
+        // Store dummy session
+        localStorage.setItem('dummy-auth-session', JSON.stringify(dummySession));
         
         toast({
-          title: "Account created successfully!",
-          description: "Please complete your profile setup.",
-        });
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          phone: phoneNumber,
-          password: password,
+          title: isSignUp ? "Account created successfully!" : "Login successful!",
+          description: "Welcome to Mandi Mitra",
         });
         
-        if (error) throw error;
+        onSuccess();
+      } else {
+        throw new Error('Please enter both phone number and password');
       }
-      
-      onSuccess();
     } catch (error: any) {
       toast({
         title: "Authentication Error",
@@ -64,6 +70,9 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         </h2>
         <p className="text-gray-600 mt-2">
           {isSignUp ? 'Join Mandi Mitra today' : 'Sign in to your account'}
+        </p>
+        <p className="text-sm text-blue-600 mt-1">
+          (Demo mode: Use any phone number and password)
         </p>
       </div>
 

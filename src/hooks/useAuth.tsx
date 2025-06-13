@@ -9,7 +9,22 @@ export const useAuth = () => {
   const [hasProfile, setHasProfile] = useState(false);
 
   useEffect(() => {
-    // Get initial session
+    // Check for dummy session first
+    const dummySession = localStorage.getItem('dummy-auth-session');
+    if (dummySession) {
+      try {
+        const session = JSON.parse(dummySession);
+        setUser(session.user);
+        // For dummy auth, assume profile is always complete
+        setHasProfile(true);
+        setLoading(false);
+        return;
+      } catch (error) {
+        localStorage.removeItem('dummy-auth-session');
+      }
+    }
+
+    // Fallback to real Supabase auth
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -52,7 +67,12 @@ export const useAuth = () => {
   };
 
   const signOut = async () => {
+    // Clear dummy session
+    localStorage.removeItem('dummy-auth-session');
+    // Also sign out from Supabase if there's a real session
     await supabase.auth.signOut();
+    setUser(null);
+    setHasProfile(false);
   };
 
   return {

@@ -1,44 +1,53 @@
-
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Bot, User } from 'lucide-react';
+import { generateResponse, ChatMessage } from '@/lib/gemini';
+import { useToast } from '@/hooks/use-toast';
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: 1,
-      text: "Hello! I'm your farming assistant. I can help you with farming advice, market prices, and crop information. What would you like to know?",
-      sender: 'bot',
-      timestamp: new Date()
+      role: 'model',
+      parts: "Hello! I'm your farming assistant powered by Gemini AI. I can help you with farming advice, market prices, and crop information. What would you like to know?"
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const sendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const sendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
 
-    const newMessage = {
-      id: messages.length + 1,
-      text: inputMessage,
-      sender: 'user',
-      timestamp: new Date()
+    const userMessage: ChatMessage = {
+      role: 'user',
+      parts: inputMessage.trim()
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
+    setIsLoading(true);
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = {
-        id: messages.length + 2,
-        text: "Thank you for your question. I'm here to help you with all your farming needs. Please feel free to ask me anything about crops, weather, market prices, or farming techniques.",
-        sender: 'bot',
-        timestamp: new Date()
+    try {
+      const response = await generateResponse([...messages, userMessage]);
+      
+      const botMessage: ChatMessage = {
+        role: 'model',
+        parts: response
       };
-      setMessages(prev => [...prev, botResponse]);
-    }, 1000);
+
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get response from AI. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -54,46 +63,55 @@ const ChatPage = () => {
                 <Bot className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">Mitra - Your Farming Assistant</h1>
-                <p className="text-sm text-gray-500">Ask me anything about farming, crops, and market prices</p>
+                <h1 className="text-lg font-semibold text-gray-900">Mitra - Your AI Farming Assistant</h1>
+                <p className="text-sm text-gray-500">Powered by Gemini AI</p>
               </div>
             </div>
           </div>
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
-                key={message.id}
+                key={index}
                 className={`flex items-start space-x-3 ${
-                  message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                  message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
                 }`}
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  message.sender === 'user' 
+                  message.role === 'user' 
                     ? 'bg-blue-600' 
                     : 'bg-green-600'
                 }`}>
-                  {message.sender === 'user' ? (
+                  {message.role === 'user' ? (
                     <User className="w-4 h-4 text-white" />
                   ) : (
                     <Bot className="w-4 h-4 text-white" />
                   )}
                 </div>
                 <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                  message.sender === 'user'
+                  message.role === 'user'
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-900'
                 }`}>
-                  <p className="text-sm">{message.text}</p>
-                  <p className={`text-xs mt-1 ${
-                    message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-                  }`}>
-                    {message.timestamp.toLocaleTimeString()}
-                  </p>
+                  <p className="text-sm whitespace-pre-wrap">{message.parts}</p>
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-green-600">
+                  <Bot className="w-4 h-4 text-white" />
+                </div>
+                <div className="bg-gray-100 text-gray-900 px-4 py-2 rounded-lg">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Input */}
@@ -105,8 +123,9 @@ const ChatPage = () => {
                 placeholder="Type your message..."
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 className="flex-1"
+                disabled={isLoading}
               />
-              <Button onClick={sendMessage}>
+              <Button onClick={sendMessage} disabled={isLoading}>
                 <Send className="w-4 h-4" />
               </Button>
             </div>

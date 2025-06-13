@@ -21,21 +21,21 @@ export default defineConfig({
         theme_color: '#22c55e',
         background_color: '#ffffff',
         display: 'standalone',
-        scope: '/',
-        start_url: '/',
+        scope: '/Naanu-Raitha/',
+        start_url: '/Naanu-Raitha/',
         icons: [
           {
-            src: 'icons/icon-192x192.png',
+            src: '/Naanu-Raitha/icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'icons/icon-512x512.png',
+            src: '/Naanu-Raitha/icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: 'icons/icon-512x512.png',
+            src: '/Naanu-Raitha/icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
@@ -82,4 +82,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: '/Naanu-Raitha/', // Add this for GitHub Pages deployment
 });

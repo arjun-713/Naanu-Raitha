@@ -9,7 +9,261 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      active_crops: {
+        Row: {
+          acres: number | null
+          created_at: string | null
+          crop_id: string | null
+          harvest_date: string | null
+          id: string
+          planting_date: string | null
+          selling_price: number | null
+          status: string | null
+          total_investment: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          acres?: number | null
+          created_at?: string | null
+          crop_id?: string | null
+          harvest_date?: string | null
+          id?: string
+          planting_date?: string | null
+          selling_price?: number | null
+          status?: string | null
+          total_investment?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          acres?: number | null
+          created_at?: string | null
+          crop_id?: string | null
+          harvest_date?: string | null
+          id?: string
+          planting_date?: string | null
+          selling_price?: number | null
+          status?: string | null
+          total_investment?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "active_crops_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops_master"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crop_expenses: {
+        Row: {
+          active_crop_id: string | null
+          amount: number
+          created_at: string | null
+          expense_date: string | null
+          id: string
+          notes: string | null
+        }
+        Insert: {
+          active_crop_id?: string | null
+          amount: number
+          created_at?: string | null
+          expense_date?: string | null
+          id?: string
+          notes?: string | null
+        }
+        Update: {
+          active_crop_id?: string | null
+          amount?: number
+          created_at?: string | null
+          expense_date?: string | null
+          id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crop_expenses_active_crop_id_fkey"
+            columns: ["active_crop_id"]
+            isOneToOne: false
+            referencedRelation: "active_crops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crop_history: {
+        Row: {
+          acres: number | null
+          created_at: string | null
+          crop_name: string
+          harvest_date: string | null
+          id: string
+          mandi_name: string | null
+          planting_date: string | null
+          profit: number | null
+          selling_price: number | null
+          total_investment: number | null
+          user_id: string | null
+        }
+        Insert: {
+          acres?: number | null
+          created_at?: string | null
+          crop_name: string
+          harvest_date?: string | null
+          id?: string
+          mandi_name?: string | null
+          planting_date?: string | null
+          profit?: number | null
+          selling_price?: number | null
+          total_investment?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          acres?: number | null
+          created_at?: string | null
+          crop_name?: string
+          harvest_date?: string | null
+          id?: string
+          mandi_name?: string | null
+          planting_date?: string | null
+          profit?: number | null
+          selling_price?: number | null
+          total_investment?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      crops_master: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          hindi_name: string | null
+          id: string
+          kannada_name: string | null
+          malayalam_name: string | null
+          name: string
+          tamil_name: string | null
+          telugu_name: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          hindi_name?: string | null
+          id?: string
+          kannada_name?: string | null
+          malayalam_name?: string | null
+          name: string
+          tamil_name?: string | null
+          telugu_name?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          hindi_name?: string | null
+          id?: string
+          kannada_name?: string | null
+          malayalam_name?: string | null
+          name?: string
+          tamil_name?: string | null
+          telugu_name?: string | null
+        }
+        Relationships: []
+      }
+      mandis_master: {
+        Row: {
+          address: string | null
+          created_at: string | null
+          district: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          name: string
+          state: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string | null
+          district: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          state: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string | null
+          district?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          state?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          district: string | null
+          id: string
+          phone_number: string | null
+          preferred_mandi: string | null
+          state: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          district?: string | null
+          id: string
+          phone_number?: string | null
+          preferred_mandi?: string | null
+          state?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          district?: string | null
+          id?: string
+          phone_number?: string | null
+          preferred_mandi?: string | null
+          state?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_crops: {
+        Row: {
+          created_at: string | null
+          crop_id: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          crop_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          crop_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_crops_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops_master"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

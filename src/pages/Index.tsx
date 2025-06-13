@@ -1,9 +1,9 @@
 
 import Header from '../components/Header';
-import WeatherWidget from '../components/WeatherWidget';
-import QuickActions from '../components/QuickActions';
-import CropWatchlist from '../components/CropWatchlist';
-import HarvestSummary from '../components/HarvestSummary';
+import EnhancedWeatherWidget from '../components/EnhancedWeatherWidget';
+import EnhancedQuickActions from '../components/EnhancedQuickActions';
+import UserCropWatchlist from '../components/UserCropWatchlist';
+import ActiveCrops from '../components/ActiveCrops';
 import MarketNews from '../components/MarketNews';
 
 const Index = () => {
@@ -15,23 +15,23 @@ const Index = () => {
         {/* Watchlist and Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-1">
-            <CropWatchlist />
+            <UserCropWatchlist />
           </div>
           <div className="lg:col-span-2">
-            <QuickActions />
+            <EnhancedQuickActions />
           </div>
         </div>
 
         {/* Weather Widget */}
         <div className="mb-8">
-          <WeatherWidget />
+          <EnhancedWeatherWidget />
         </div>
 
         {/* Main Content */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="xl:col-span-2 space-y-8">
-            <HarvestSummary />
+            <ActiveCrops />
           </div>
           
           {/* Right Column */}

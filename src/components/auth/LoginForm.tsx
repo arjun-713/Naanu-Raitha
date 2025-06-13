@@ -1,0 +1,120 @@
+
+import React, { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { Phone, Lock } from 'lucide-react';
+
+interface LoginFormProps {
+  onSuccess: () => void;
+}
+
+const LoginForm = ({ onSuccess }: LoginFormProps) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { toast } = useToast();
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          phone: phoneNumber,
+          password: password,
+        });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Account created successfully!",
+          description: "Please complete your profile setup.",
+        });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          phone: phoneNumber,
+          password: password,
+        });
+        
+        if (error) throw error;
+      }
+      
+      onSuccess();
+    } catch (error: any) {
+      toast({
+        title: "Authentication Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">
+          {isSignUp ? 'Create Account' : 'Welcome Back'}
+        </h2>
+        <p className="text-gray-600 mt-2">
+          {isSignUp ? 'Join Mandi Mitra today' : 'Sign in to your account'}
+        </p>
+      </div>
+
+      <form onSubmit={handleAuth} className="space-y-4">
+        <div>
+          <Label htmlFor="phone">Phone Number</Label>
+          <div className="relative">
+            <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              id="phone"
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="+91 9876543210"
+              className="pl-10"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="pl-10"
+              required
+            />
+          </div>
+        </div>
+
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
+        </Button>
+      </form>
+
+      <div className="text-center mt-4">
+        <button
+          onClick={() => setIsSignUp(!isSignUp)}
+          className="text-green-600 hover:text-green-700 text-sm"
+        >
+          {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default LoginForm;

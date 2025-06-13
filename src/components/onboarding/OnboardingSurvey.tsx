@@ -14,6 +14,7 @@ interface OnboardingSurveyProps {
 }
 
 const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
+  const [name, setName] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
   const [preferredMandi, setPreferredMandi] = useState('');
@@ -35,41 +36,41 @@ const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
     'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
   ];
 
-  useEffect(() => {
-    fetchCrops();
-  }, []);
+  // Sample crops for demo mode
+  const sampleCrops = [
+    { id: '1', name: 'Wheat' },
+    { id: '2', name: 'Rice' },
+    { id: '3', name: 'Corn' },
+    { id: '4', name: 'Tomato' },
+    { id: '5', name: 'Potato' },
+    { id: '6', name: 'Onion' },
+    { id: '7', name: 'Cotton' },
+    { id: '8', name: 'Sugarcane' },
+  ];
+
+  // Sample mandis for demo mode
+  const sampleMandis = [
+    { id: '1', name: 'Central Market', district: 'Delhi', state: 'Delhi' },
+    { id: '2', name: 'Agricultural Market', district: 'Mumbai', state: 'Maharashtra' },
+    { id: '3', name: 'Farmers Market', district: 'Bangalore', state: 'Karnataka' },
+  ];
 
   useEffect(() => {
-    if (state) {
-      fetchMandis();
-    }
-  }, [state]);
+    // Use sample data for demo mode
+    setCrops(sampleCrops);
+    setMandis(sampleMandis);
+  }, []);
 
   useEffect(() => {
     if (cropSearch) {
       const filtered = crops.filter(crop => 
-        crop.name.toLowerCase().includes(cropSearch.toLowerCase()) ||
-        crop.hindi_name?.toLowerCase().includes(cropSearch.toLowerCase())
+        crop.name.toLowerCase().includes(cropSearch.toLowerCase())
       );
       setFilteredCrops(filtered);
     } else {
       setFilteredCrops([]);
     }
   }, [cropSearch, crops]);
-
-  const fetchCrops = async () => {
-    const { data } = await supabase.from('crops_master').select('*');
-    if (data) setCrops(data);
-  };
-
-  const fetchMandis = async () => {
-    const { data } = await supabase
-      .from('mandis_master')
-      .select('*')
-      .eq('state', state)
-      .order('name');
-    if (data) setMandis(data);
-  };
 
   const addCrop = (crop: any) => {
     if (!selectedCrops.find(c => c === crop.id)) {
@@ -87,6 +88,33 @@ const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
     setIsLoading(true);
 
     try {
+      // Check if this is a dummy session
+      const dummySession = localStorage.getItem('dummy-auth-session');
+      if (dummySession) {
+        const session = JSON.parse(dummySession);
+        
+        // Save profile data to localStorage for dummy users
+        const profileData = {
+          name,
+          state,
+          district,
+          preferred_mandi: preferredMandi,
+          crops: selectedCrops,
+          completed_at: new Date().toISOString()
+        };
+        
+        localStorage.setItem(`profile-${session.user.id}`, JSON.stringify(profileData));
+        
+        toast({
+          title: "Profile setup complete!",
+          description: "Welcome to Mandi Mitra",
+        });
+        
+        onComplete();
+        return;
+      }
+
+      // Real Supabase implementation for actual users
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not found');
 
@@ -143,6 +171,16 @@ const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
+          <Label htmlFor="name">What's your name?</Label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+
+        <div>
           <Label htmlFor="state">Which state do you farm in?</Label>
           <Select value={state} onValueChange={setState} required>
             <SelectTrigger>
@@ -169,27 +207,13 @@ const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
         </div>
 
         <div>
-          <Label htmlFor="mandi">Which mandi do you usually sell at?</Label>
+          <Label htmlFor="mandi">Which market do you usually sell at?</Label>
           <Select value={preferredMandi} onValueChange={setPreferredMandi} required>
             <SelectTrigger>
-              <SelectValue placeholder="Select your preferred mandi" />
+              <SelectValue placeholder="Select your preferred market" />
             </SelectTrigger>
             <SelectContent>
-              {district && (
-                <>
-                  {mandis.filter(m => m.district === district).map(mandi => (
-                    <SelectItem key={mandi.id} value={mandi.name}>
-                      {mandi.name} (Your District)
-                    </SelectItem>
-                  ))}
-                  {mandis.filter(m => m.district === district).length > 0 && (
-                    <SelectItem disabled value="separator">
-                      --- Other Mandis in {state} ---
-                    </SelectItem>
-                  )}
-                </>
-              )}
-              {mandis.filter(m => !district || m.district !== district).map(mandi => (
+              {getStateMandis().map(mandi => (
                 <SelectItem key={mandi.id} value={mandi.name}>
                   {mandi.name} ({mandi.district})
                 </SelectItem>
@@ -216,7 +240,7 @@ const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
                     onClick={() => addCrop(crop)}
                     className="block w-full text-left p-2 hover:bg-gray-100 rounded"
                   >
-                    {crop.name} {crop.hindi_name && `(${crop.hindi_name})`}
+                    {crop.name}
                   </button>
                 ))}
               </div>
@@ -244,7 +268,7 @@ const OnboardingSurvey = ({ onComplete }: OnboardingSurveyProps) => {
         <Button 
           type="submit" 
           className="w-full" 
-          disabled={isLoading || selectedCrops.length === 0}
+          disabled={isLoading || selectedCrops.length === 0 || !name}
         >
           {isLoading ? 'Setting up...' : 'Complete Setup'}
         </Button>

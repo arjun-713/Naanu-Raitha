@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,23 +22,23 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
     setIsLoading(true);
 
     try {
-      // Dummy authentication - accept any phone number and password
+      // Simple dummy authentication - accept any phone number and password
       if (phoneNumber && password) {
-        // Create a dummy user session in localStorage for testing
+        // Create a simple dummy user session
         const dummyUser = {
-          id: 'dummy-user-' + Date.now(),
+          id: `user-${phoneNumber}`,
           phone: phoneNumber,
-          email: `${phoneNumber}@dummy.com`,
+          email: `${phoneNumber}@example.com`,
           created_at: new Date().toISOString(),
         };
         
         const dummySession = {
           user: dummyUser,
-          access_token: 'dummy-token',
-          refresh_token: 'dummy-refresh',
+          access_token: 'demo-token',
+          refresh_token: 'demo-refresh',
         };
 
-        // Store dummy session
+        // Store session in localStorage
         localStorage.setItem('dummy-auth-session', JSON.stringify(dummySession));
         
         toast({
@@ -72,7 +71,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
           {isSignUp ? 'Join Mandi Mitra today' : 'Sign in to your account'}
         </p>
         <p className="text-sm text-blue-600 mt-1">
-          (Demo mode: Use any phone number and password)
+          (Demo mode: Use any phone number like "1234" and password like "abc")
         </p>
       </div>
 
@@ -83,10 +82,10 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
             <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               id="phone"
-              type="tel"
+              type="text"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="+91 9876543210"
+              placeholder="1234"
               className="pl-10"
               required
             />
@@ -102,7 +101,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="abc"
               className="pl-10"
               required
             />

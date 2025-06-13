@@ -15,8 +15,9 @@ export const useAuth = () => {
       try {
         const session = JSON.parse(dummySession);
         setUser(session.user);
-        // For dummy auth, assume profile is always complete
-        setHasProfile(true);
+        // Check if user has completed profile setup
+        const profileData = localStorage.getItem(`profile-${session.user.id}`);
+        setHasProfile(!!profileData);
         setLoading(false);
         return;
       } catch (error) {
@@ -67,8 +68,18 @@ export const useAuth = () => {
   };
 
   const signOut = async () => {
-    // Clear dummy session
+    // Clear dummy session and profile data
+    const dummySession = localStorage.getItem('dummy-auth-session');
+    if (dummySession) {
+      try {
+        const session = JSON.parse(dummySession);
+        localStorage.removeItem(`profile-${session.user.id}`);
+      } catch (error) {
+        // Ignore error
+      }
+    }
     localStorage.removeItem('dummy-auth-session');
+    
     // Also sign out from Supabase if there's a real session
     await supabase.auth.signOut();
     setUser(null);

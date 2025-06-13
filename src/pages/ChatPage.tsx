@@ -9,7 +9,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "नमस्ते! मैं आपका कृषि मित्र हूं। मैं आपकी खेती, मंडी की कीमतों, और फसल की जानकारी में मदद कर सकता हूं। आप मुझसे क्या पूछना चाहते हैं?",
+      text: "Hello! I'm your farming assistant. I can help you with farming advice, market prices, and crop information. What would you like to know?",
       sender: 'bot',
       timestamp: new Date()
     }
@@ -33,7 +33,7 @@ const ChatPage = () => {
     setTimeout(() => {
       const botResponse = {
         id: messages.length + 2,
-        text: "धन्यवाद आपके प्रश्न के लिए। मैं आपकी मदद करने की कोशिश कर रहा हूं। कृपया अपना प्रश्न और विस्तार से बताएं।",
+        text: "Thank you for your question. I'm here to help you with all your farming needs. Please feel free to ask me anything about crops, weather, market prices, or farming techniques.",
         sender: 'bot',
         timestamp: new Date()
       };
@@ -102,7 +102,7 @@ const ChatPage = () => {
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Type your message in Hindi or English..."
+                placeholder="Type your message..."
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 className="flex-1"
               />

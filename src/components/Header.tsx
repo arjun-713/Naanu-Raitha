@@ -10,7 +10,7 @@ const Header = () => {
     <header className="bg-white border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold text-green-600">
-          KisanMitra
+          Mandi Mithra
         </Link>
         
         <nav className="hidden md:flex items-center space-x-6">
@@ -36,8 +36,11 @@ const Header = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <User className="h-5 w-5 text-gray-600" />
-                <span className="text-gray-600">{user.email}</span>
-              </div>
+                <span className="text-gray-600 cursor-pointer" onClick={() => {
+                  localStorage.removeItem(`profile-${user.id}`);
+                  window.location.reload();
+                }}>{user.user_metadata?.name || user.email}</span>
+                </div>
               <Button
                 variant="ghost"
                 size="icon"

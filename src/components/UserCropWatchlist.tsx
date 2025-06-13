@@ -3,9 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { MoreVertical } from 'lucide-react';
 import PriceWidget from './PriceWidget';
+import { fetchCropPrices } from '@/utils/cropPriceData';
 
 const UserCropWatchlist = () => {
-  const [userCrops, setUserCrops] = useState<any[]>([]);
+  const [userCrops, setUserCrops] = useState<{
+    cropId: string;
+    cropName: string;
+    currentPrice: number;
+    change: number;
+    changePercent: number;
+    unit: string;
+    chartData: Array<number>;
+  }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,17 +38,27 @@ const UserCropWatchlist = () => {
         `)
         .eq('user_id', user.id);
 
-      if (data) {
-        // Mock price data for user crops
-        const cropsWithPrices = data.map(crop => ({
-          cropName: crop.crops_master.name,
-          currentPrice: Math.floor(Math.random() * 5000) + 1000,
-          change: Math.floor(Math.random() * 200) - 100,
-          changePercent: (Math.random() * 20) - 10,
-          unit: 'per quintal',
-          chartData: Array.from({ length: 7 }, () => Math.floor(Math.random() * 1000) + 2000)
+      if (data && data.length > 0) {
+        // Get crop IDs for price fetching
+        const cropIds = data.map(crop => crop.crops_master.id);
+        
+        // Fetch real price data from API
+        const cropPrices = await fetchCropPrices(cropIds);
+        
+        // Match crop prices with user crops
+        const cropsWithPrices = cropPrices.map(price => ({
+          cropId: price.cropId,
+          cropName: price.cropName,
+          currentPrice: price.currentPrice,
+          change: price.change,
+          changePercent: price.changePercent,
+          unit: price.unit,
+          chartData: price.chartData
         }));
+        
         setUserCrops(cropsWithPrices);
+      } else {
+        setUserCrops([]);
       }
     } catch (error) {
       console.error('Error fetching user crops:', error);
@@ -61,16 +80,17 @@ const UserCropWatchlist = () => {
         </button>
       </div>
       
-      <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide">
-        {userCrops.map((crop, index) => (
-          <PriceWidget key={index} {...crop} />
-        ))}
-        {userCrops.length === 0 && (
-          <div className="text-gray-500 text-center w-full py-8">
-            No crops in your watchlist. Add some crops in your profile!
-          </div>
-        )}
-      </div>
+      {userCrops.length === 0 ? (
+        <div className="text-gray-500 text-center w-full py-8 bg-gray-50 rounded-lg border border-gray-200">
+          No crops in your watchlist. Add some crops in your profile!
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {userCrops.map((crop, index) => (
+            <PriceWidget key={index} {...crop} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

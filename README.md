@@ -1,4 +1,14 @@
-# Welcome to your Lovable project
+# Mandi Mithra - Farmer's Companion App
+
+## About Mandi Mithra
+
+Mandi Mithra is a comprehensive mobile application designed to empower farmers with tools for crop management, price prediction, and market insights. The app features:
+
+- **Crop Management**: Track and manage your active crops
+- **Price Prediction**: ML-based crop price forecasting
+- **Weather Updates**: Real-time weather information for your location
+- **Market Insights**: Find nearby mandis and track price trends
+- **Harvest Planning**: Plan and optimize your harvest schedule
 
 ## Project info
 
@@ -59,6 +69,7 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (for backend and authentication)
 
 ## How can I deploy this project?
 

@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
   console.log('Environment variables loaded:', Object.keys(env).filter(key => key.startsWith('VITE_')));
   
   return {
-    base: '/Roddddd/',
+    base: '/',
     server: {
       host: "::",
       port: 8080,
@@ -24,10 +24,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
-    },
-    // Expose env variables to your app
-    define: {
-      'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY)
     }
+    // No env variables exposed to the app
   };
 });

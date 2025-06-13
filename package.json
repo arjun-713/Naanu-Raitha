@@ -1,4 +1,10 @@
 {
+  "dependencies": {
+    "vite-plugin-pwa": "^0.17.4",
+    // ... your other dependencies
+  }
+}
+{
   "name": "mandi-mithra",
   "private": true,
   "version": "0.0.0",

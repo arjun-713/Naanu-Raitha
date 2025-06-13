@@ -1,84 +1,58 @@
-# Mandi Mithra - Farmer's Companion App
+# 🌾 MandiMithra
 
-## About Mandi Mithra
+**MandiMithra** is a Progressive Web App (PWA) built to empower Indian farmers with data-driven crop selling, AI-powered support, and direct access to buyers — all in one seamless platform.
 
-Mandi Mithra is a comprehensive mobile application designed to empower farmers with tools for crop management, price prediction, and market insights. The app features:
+> 💡 Built with love for the soil and the future of Indian agriculture.
 
-- **Crop Management**: Track and manage your active crops
-- **Price Prediction**: ML-based crop price forecasting
-- **Weather Updates**: Real-time weather information for your location
-- **Market Insights**: Find nearby mandis and track price trends
-- **Harvest Planning**: Plan and optimize your harvest schedule
+---
 
-## Project info
+## 🚀 Live Demo
 
-**URL**: https://lovable.dev/projects/9e125c65-69b4-4b1e-b083-372cd5cae8e9
+🔗 [https://mandimithra.vercel.app](https://mandimithra.vercel.app)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📦 Features
 
-**Use Lovable**
+- ✅ **AI Chatbot Support** (powered by Gemini)
+- 📈 **Live + Predicted Crop Prices** from government APIs
+- 🧮 **Price Forecasting & Peak Date Prediction**
+- 🔄 **Sell Crops Online** (transport range, price, risk, net gain)
+- 🧠 **Risk Assessment Engine** (storage risk vs price gain)
+- 💬 **Farmer Community Space**
+- 📊 **Farmer Dashboard** (past sales, stats)
+- ⭐ **Buyer Reviews & Ratings**
+- 📍 **Language + Region Personalization**
+- 🧺 **Farming Essentials Marketplace**
+- 🔐 **Secure Onboarding & Profile Management**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9e125c65-69b4-4b1e-b083-372cd5cae8e9) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🧑‍🌾 Built For
 
-**Use your preferred IDE**
+- Farmers looking to sell smarter.
+- Buyers who want fresh, direct-from-farm produce.
+- Anyone solving real-world agricultural challenges.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🛠️ Tech Stack
 
-Follow these steps:
+- **Frontend:** Vite + React + TailwindCSS
+- **Backend:** Supabase (Auth + DB), Node.js (planned)
+- **PWA:** Vite Plugin PWA / Service Worker
+- **AI:** Gemini API (via REST)
+- **APIs Used:**
+  - Agmarknet (Gov crop prices)
+  - OpenWeatherMap (optional)
+  - Google Maps (for mandi discovery)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## ⚙️ Getting Started
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 1. Clone the Repo
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-- Supabase (for backend and authentication)
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/9e125c65-69b4-4b1e-b083-372cd5cae8e9) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```bash
+git clone https://github.com/arjun-713/naanu-raitha.git
+cd naanu-raitha

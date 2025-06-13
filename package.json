@@ -1,10 +1,4 @@
 {
-  "dependencies": {
-    "vite-plugin-pwa": "^0.17.4",
-    
-  }
-}
-{
   "name": "mandi-mithra",
   "private": true,
   "version": "0.0.0",
@@ -71,6 +65,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.3",
+    "vite-plugin-pwa": "^0.17.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
